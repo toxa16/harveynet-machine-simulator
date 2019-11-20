@@ -1,10 +1,10 @@
 import React from 'react';
 
-export default function ConnectionForm({ isConnected }) {
+export default function ConnectionForm({ isConnected, onConnect }) {
   function handleSubmit(e) {
     e.preventDefault();
     const machineId = e.target.machine_id.value;
-    console.log({ machineId });
+    onConnect(machineId);
   }
 
   function renderStatus() {
@@ -20,19 +20,26 @@ export default function ConnectionForm({ isConnected }) {
       <form onSubmit={handleSubmit} data-cy="connection-form">
         <div className="form-group">
           <label>Machine ID:</label>
-          <input name="machine_id" className="form-control" required />
+          <input
+            name="machine_id"
+            className="form-control"
+            required
+          />
         </div>
 
         <div>
           <button
             type="submit"
+            data-cy="connect-button"
             className="btn btn-primary"
             disabled={isConnected}
           >
             Connect
           </button>
+
           <button
             type="button"
+            data-cy="disconnect-button"
             className="btn btn-danger ml-3"
             disabled={!isConnected}
           >
