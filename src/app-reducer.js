@@ -6,7 +6,7 @@ const initialState = {
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
-    case ActionType.CONNECT: {
+    case ActionType.CONNECT_SUCCESS: {
       return Object.assign({}, state, {
         isConnected: true,
       });
