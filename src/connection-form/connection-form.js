@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ConnectionForm() {
+export default function ConnectionForm({ isConnected }) {
   function handleSubmit(e) {
     e.preventDefault();
     const machineId = e.target.machine_id.value;
