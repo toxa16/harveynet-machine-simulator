@@ -27,5 +27,10 @@ describe('Connection', () => {
     cy.get('[data-cy="connection-form"]')
       .find('[data-cy="disconnect-button"]')
       .should('not.be.disabled');
+
+    // see the machine id input disabled
+    cy.get('[data-cy="connection-form"]')
+      .find('[name="machine_id"]')
+      .should('be.disabled');
   });
 });

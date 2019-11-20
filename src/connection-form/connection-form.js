@@ -23,6 +23,7 @@ export default function ConnectionForm({ isConnected, onConnect }) {
           <input
             name="machine_id"
             className="form-control"
+            disabled={isConnected}
             required
           />
         </div>
