@@ -17,7 +17,7 @@ export default function ConnectionForm({ isConnected }) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} data-cy="connection-form">
         <div className="form-group">
           <label>Machine ID:</label>
           <input name="machine_id" className="form-control" required />
