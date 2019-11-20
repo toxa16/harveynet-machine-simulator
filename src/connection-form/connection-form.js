@@ -1,6 +1,8 @@
 import React from 'react';
 
-export default function ConnectionForm({ isConnected, onConnect }) {
+export default function ConnectionForm({
+  isConnected, onConnect, onDisconnect,
+}) {
   function handleSubmit(e) {
     e.preventDefault();
     const machineId = e.target.machine_id.value;
@@ -43,6 +45,7 @@ export default function ConnectionForm({ isConnected, onConnect }) {
             data-cy="disconnect-button"
             className="btn btn-danger ml-3"
             disabled={!isConnected}
+            onClick={ e => onDisconnect() }
           >
             Disconnect
           </button>

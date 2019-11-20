@@ -12,6 +12,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onConnect: () => dispatch({ type: ActionType.CONNECT }),
+    onDisconnect: () => dispatch({ type: ActionType.DISCONNECT }),
   };
 }
 

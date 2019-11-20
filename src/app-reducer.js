@@ -11,6 +11,11 @@ export default function appReducer(state = initialState, action) {
         isConnected: true,
       });
     }
+    case ActionType.DISCONNECT: {
+      return Object.assign({}, state, {
+        isConnected: false,
+      });
+    }
     default: return state;
   }
 }
