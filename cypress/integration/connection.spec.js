@@ -9,6 +9,10 @@ describe('Connection', () => {
       .find('[data-cy="disconnect-button"]')
       .should('be.disabled');
 
+    // see connection status "Disconnected"
+    cy.get('[data-cy="connection-status"]')
+      .contains('Disconnected');
+
     // CONNECTING
     // enter a machine id
     cy.get('[data-cy="connection-form"]')
@@ -34,6 +38,10 @@ describe('Connection', () => {
       .find('[name="machine_id"]')
       .should('be.disabled');
 
+    // see connection status "Connected"
+    cy.get('[data-cy="connection-status"]')
+      .contains('Connected');
+
     // DISCONNECTING
     // click the disconnect button
     cy.get('[data-cy="connection-form"]')
@@ -54,5 +62,9 @@ describe('Connection', () => {
     cy.get('[data-cy="connection-form"]')
       .find('[name="machine_id"]')
       .should('not.be.disabled');
+    
+    // see connection status "Disconnected"
+    cy.get('[data-cy="connection-status"]')
+      .contains('Disconnected');
   });
 });

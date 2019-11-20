@@ -52,7 +52,7 @@ export default function ConnectionForm({
         </div>
       </form>
 
-      <div className="mt-4">
+      <div className="mt-4" data-cy="connection-status">
         <span>Status:</span>
         {' '}
         { renderStatus() }
