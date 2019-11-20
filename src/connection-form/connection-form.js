@@ -7,6 +7,14 @@ export default function ConnectionForm({ isConnected }) {
     console.log({ machineId });
   }
 
+  function renderStatus() {
+    if (isConnected) {
+      return <b className="text-success">Connected</b>;
+    } else {
+      return <b className="text-dark">Disconnected</b>;
+    }
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -16,10 +24,18 @@ export default function ConnectionForm({ isConnected }) {
         </div>
 
         <div>
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={isConnected}
+          >
             Connect
           </button>
-          <button type="button" className="btn btn-danger ml-3" disabled>
+          <button
+            type="button"
+            className="btn btn-danger ml-3"
+            disabled={!isConnected}
+          >
             Disconnect
           </button>
         </div>
@@ -28,7 +44,7 @@ export default function ConnectionForm({ isConnected }) {
       <div className="mt-4">
         <span>Status:</span>
         {' '}
-        <b className="text-dark">Disconnected</b>
+        { renderStatus() }
       </div>
     </div>
   );
