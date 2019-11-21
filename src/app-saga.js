@@ -38,16 +38,16 @@ function controlServerChannel(machineId) {
 
 export default function* appSaga() {
   while (true) {
-    yield take(ActionType.CONNECT_REQUEST);
-    yield put({ type: ActionType.CONNECT_SUCCESS });
+    const connectAction = yield take(ActionType.CONNECT_REQUEST);
+    yield put({ type: ActionType.CONNECT_SUCCESS });  // DISORDERED
 
     // connecting to control server (websocket)
-    const machineId = 'machine0'; // HARDCODE
+    const { machineId } = connectAction.payload;
     const channel = yield call(controlServerChannel, machineId);
 
     yield take(ActionType.DISCONNECT_REQUEST);
     // disconnecting from control server
     channel.close();
-    yield put({ type: ActionType.DISCONNECT_SUCCESS });
+    yield put({ type: ActionType.DISCONNECT_SUCCESS }); // DISORDERED
   }
 }

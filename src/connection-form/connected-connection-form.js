@@ -11,7 +11,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onConnect: () => dispatch({ type: ActionType.CONNECT_REQUEST }),
+    onConnect: machineId => {
+      dispatch({
+        type: ActionType.CONNECT_REQUEST,
+        payload: { machineId },
+      });
+    },
     onDisconnect: () => dispatch({ type: ActionType.DISCONNECT_REQUEST }),
   };
 }
