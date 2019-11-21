@@ -1,17 +1,17 @@
 import { call, fork, put, take } from 'redux-saga/effects';
-import { eventChannel } from 'redux-saga';
+import { eventChannel, END } from 'redux-saga';
 
 import ActionType from './action-type.enum';
 
 const controlServerUrl = 'ws://localhost:5000'; // env
 
-function controlServerChannel(machineId) {
-  const url = `${controlServerUrl}/?machine=${machineId}`;
-  const socket = new WebSocket(url);
-
+/**
+ * Control Server WebSocket channel.
+ * @param {*} socket 
+ */
+function controlServerChannel(socket) {
   return eventChannel(emit => {
     function handleOpen() {
-      console.log('websocket opened.')
       const action = { type: ActionType.CONNECT_SUCCESS };
       emit(action);
     }
@@ -24,7 +24,9 @@ function controlServerChannel(machineId) {
       emit(action);
     }
     function handleClose() {
-      console.log('websocket closed.');
+      const action = { type: ActionType.DISCONNECT_SUCCESS };
+      emit(action);
+      emit(END);
     }
 
     socket.addEventListener('open', handleOpen);
@@ -33,11 +35,18 @@ function controlServerChannel(machineId) {
     socket.addEventListener('close', handleClose);
 
     return () => {
-      socket.close();
+      socket.removeEventListener('open', handleOpen);
+      socket.removeEventListener('error', handleError);
+      socket.removeEventListener('message', handleMessage);
+      socket.removeEventListener('close', handleClose);
     };
   });
 }
 
+/**
+ * WebSocket channel event listener.
+ * @param {*} channel 
+ */
 function* handleChannelEmitter(channel) {
   while (true) {
     const action  = yield take(channel);
@@ -45,20 +54,27 @@ function* handleChannelEmitter(channel) {
   }
 }
 
+/**
+ * App saga.
+ */
 export default function* appSaga() {
   while (true) {
+    // listening for connect request
     const connectAction = yield take(ActionType.CONNECT_REQUEST);
-    //yield put({ type: ActionType.CONNECT_SUCCESS });  // DISORDERED
 
     // connecting to control server (websocket)
     const { machineId } = connectAction.payload;
-    const channel = yield call(controlServerChannel, machineId);
+    const url = `${controlServerUrl}/?machine=${machineId}`;
+    const socket = new WebSocket(url);
+    const channel = yield call(controlServerChannel, socket);
 
+    // in parallel listening for websocket events (and reacting on them)
+    // this task will become inactive on END channel signal
     yield fork(handleChannelEmitter, channel);
 
+    // listening for disconnect request
     yield take(ActionType.DISCONNECT_REQUEST);
     // disconnecting from control server
-    channel.close();
-    yield put({ type: ActionType.DISCONNECT_SUCCESS }); // DISORDERED
+    socket.close();
   }
 }
