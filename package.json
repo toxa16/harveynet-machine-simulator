@@ -1,5 +1,5 @@
 {
-  "name": "machine-simulator",
+  "name": "harveynet-machine-simulator",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
