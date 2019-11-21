@@ -1,4 +1,4 @@
-import { call, put, take } from 'redux-saga/effects';
+import { call, fork, put, take } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 
 import ActionType from './action-type.enum';
@@ -12,6 +12,8 @@ function controlServerChannel(machineId) {
   return eventChannel(emit => {
     function handleOpen() {
       console.log('websocket opened.')
+      const action = { type: ActionType.CONNECT_SUCCESS };
+      emit(action);
     }
     function handleError(e) {
       console.error('Error occurred.');
@@ -36,14 +38,23 @@ function controlServerChannel(machineId) {
   });
 }
 
+function* handleChannelEmitter(channel) {
+  while (true) {
+    const action  = yield take(channel);
+    yield put(action);
+  }
+}
+
 export default function* appSaga() {
   while (true) {
     const connectAction = yield take(ActionType.CONNECT_REQUEST);
-    yield put({ type: ActionType.CONNECT_SUCCESS });  // DISORDERED
+    //yield put({ type: ActionType.CONNECT_SUCCESS });  // DISORDERED
 
     // connecting to control server (websocket)
     const { machineId } = connectAction.payload;
     const channel = yield call(controlServerChannel, machineId);
+
+    yield fork(handleChannelEmitter, channel);
 
     yield take(ActionType.DISCONNECT_REQUEST);
     // disconnecting from control server
