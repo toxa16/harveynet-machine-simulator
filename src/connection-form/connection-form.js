@@ -57,6 +57,15 @@ export default function ConnectionForm({
         {' '}
         { renderStatus() }
       </div>
+
+      <div className="text-secondary mt-5">
+        <p>
+          This is the Machine Simulator <b>connection panel</b>.
+        </p>
+        <p>
+          Use it to simulate machine connecting/disconnecting to the Control Server.
+        </p>
+      </div>
     </div>
   );
 }
