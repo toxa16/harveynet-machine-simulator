@@ -8,7 +8,8 @@
     "react-redux": "^7.1.3",
     "react-scripts": "3.2.0",
     "redux": "^4.0.4",
-    "redux-saga": "^1.1.3"
+    "redux-saga": "^1.1.3",
+    "serve": "^11.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -20,7 +21,8 @@
     "test:unit:once": "react-scripts test --watchAll=false",
     "test:e2e": "npm run cypress:open",
     "test:e2e:once": "start-server-and-test start http://localhost:3000 cypress:run",
-    "test": "npm run test:unit:once && npm run test:e2e:once"
+    "test": "npm run test:unit:once && npm run test:e2e:once",
+    "heroku:start": "serve ./build -l $PORT"
   },
   "eslintConfig": {
     "extends": "react-app"
