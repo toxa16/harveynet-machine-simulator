@@ -1,4 +1,4 @@
-import { call, fork, put, take } from 'redux-saga/effects';
+import { call, cancel, fork, put, take } from 'redux-saga/effects';
 import { eventChannel, END } from 'redux-saga';
 
 import ActionType from './action-type.enum';
@@ -20,10 +20,13 @@ function controlServerChannel(socket) {
       console.error(e);
     }
     function handleMessage(e) {
-      const action = JSON.parse(e.data);
-      emit(action);
+      const message = e.data;
+      console.log(message);
+      //const action = JSON.parse(e.data);
+      //emit(action);
     }
     function handleClose() {
+      console.log('websocket closed')
       const action = { type: ActionType.DISCONNECT_SUCCESS };
       emit(action);
       emit(END);
@@ -54,6 +57,13 @@ function* handleChannelEmitter(channel) {
   }
 }
 
+function* handleDisconnectRequest(socket) {
+  // listening for disconnect request
+  yield take(ActionType.DISCONNECT_REQUEST);
+  // disconnecting from control server
+  socket.close();
+}
+
 /**
  * App saga.
  */
@@ -64,17 +74,22 @@ export default function* appSaga() {
 
     // connecting to control server (websocket)
     const { machineId } = connectAction.payload;
-    const url = `${controlServerUrl}/?machine=${machineId}`;
+    const url = `${controlServerUrl}/?machine_id=${machineId}`;
     const socket = new WebSocket(url);
     const channel = yield call(controlServerChannel, socket);
 
     // in parallel listening for websocket events (and reacting on them)
     // this task will become inactive on END channel signal
-    yield fork(handleChannelEmitter, channel);
+    const handleChannelTask = yield fork(handleChannelEmitter, channel);
 
-    // listening for disconnect request
-    yield take(ActionType.DISCONNECT_REQUEST);
-    // disconnecting from control server
-    socket.close();
+    // in parallel listening for disconnect request
+    const disconnectRequestTask = yield fork(handleDisconnectRequest, socket);
+
+    // listening for disconnect success
+    yield take(ActionType.DISCONNECT_SUCCESS);
+    // canceling the websocket event handling channel task
+    yield cancel(handleChannelTask);
+    // canceling the disconnect request listening task
+    yield cancel(disconnectRequestTask);
   }
 }
