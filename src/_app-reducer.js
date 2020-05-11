@@ -1,4 +1,4 @@
-import ActionType from './action-type.enum';
+import ActionType from './_action-type.enum';
 
 const initialState = {
   isConnected: false,

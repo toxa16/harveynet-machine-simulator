@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 
 import ConnectionForm from './connection-form';
-import ActionType from '../action-type.enum';
+import ActionType from '../redux/action-type';
+
 
 function mapStateToProps(state) {
   return {
@@ -20,6 +21,7 @@ function mapDispatchToProps(dispatch) {
     onDisconnect: () => dispatch({ type: ActionType.DISCONNECT_REQUEST }),
   };
 }
+
 
 const ConnectedConnectionForm = connect(
   mapStateToProps,

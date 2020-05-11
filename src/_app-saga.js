@@ -1,7 +1,7 @@
 import { call, cancel, fork, put, take } from 'redux-saga/effects';
 import { eventChannel, END } from 'redux-saga';
 
-import ActionType from './action-type.enum';
+import ActionType from './_action-type.enum';
 
 const controlServerUrl = process.env.REACT_APP_CONTROL_SERVER_URL ||
   'wss://harveynet-control-server.herokuapp.com';
