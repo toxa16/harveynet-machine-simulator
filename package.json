@@ -1,6 +1,6 @@
 {
   "name": "harveynet-machine-simulator",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "pusher-js": "^6.0.2",

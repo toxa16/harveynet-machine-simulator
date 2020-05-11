@@ -1,10 +1,12 @@
 # harveynet-machine-simulator
 
-HarveyNet Machine Simulator.
+HarveyNet Machine Simulator v0.1.0.
 
 ## Environment Variables
 
-- REACT_APP_CONTROL_SERVER_URL (default: "wss://harveynet-control-server.herokuapp.com")
+- REACT_APP_PUSHER_APP_KEY
+- REACT_APP_PUSHER_CLUSTER (default: "eu")
+- REACT_APP_PUSHER_AUTH_ENDPOINT
 
 ## tl;dr
 
